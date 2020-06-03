@@ -233,6 +233,18 @@ class RNBarLineChartViewBase: RNYAxisChartViewBase {
         }
     }
 
+    func updateData(_ data: NSDictionary) {
+        let leftX = barLineChart.lowestVisibleX
+        let json = BridgeUtils.toJson(data)
+        barLineChart.data = dataExtract.extract(json)
+
+        if let config = savedVisibleRange {
+            updateVisibleRange(config)
+        }
+        barLineChart.moveViewToX(leftX)
+        barLineChart.notifyDataSetChanged()
+    }
+
     func setDataAndLockIndex(_ data: NSDictionary) {
         let json = BridgeUtils.toJson(data)
 
@@ -264,11 +276,11 @@ class RNBarLineChartViewBase: RNYAxisChartViewBase {
         // so in iOS, we updateVisibleRange after zoom
         
         barLineChart.zoom(scaleX: CGFloat(scaleX), scaleY: CGFloat(scaleY), xValue: Double(originCenterValue.x), yValue: Double(originCenterValue.y), axis: axis)
-        
+
         if let config = savedVisibleRange {
             updateVisibleRange(config)
         }
-        barLineChart.notifyDataSetChanged()        
+        barLineChart.notifyDataSetChanged()
     }
 
     func getVisibleYRange(_ axis: YAxis.AxisDependency) -> CGFloat {
