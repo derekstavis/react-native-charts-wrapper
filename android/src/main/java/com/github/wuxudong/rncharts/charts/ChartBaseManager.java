@@ -224,10 +224,10 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
             durationY = propMap.getInt("durationY");
         }
         if (BridgeUtils.validate(propMap, ReadableType.String, "easingX")) {
-             easingX = EasingFunctionHelper.getEasingFunction(propMap.getString("easingX"));
+            easingX = EasingFunctionHelper.getEasingFunction(propMap.getString("easingX"));
         }
         if (BridgeUtils.validate(propMap, ReadableType.String, "easingY")) {
-             easingY = EasingFunctionHelper.getEasingFunction(propMap.getString("easingY"));
+            easingY = EasingFunctionHelper.getEasingFunction(propMap.getString("easingY"));
         }
 
         if (durationX != null && durationY != null) {
@@ -268,7 +268,7 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
         }
 
         String markerType = propMap.hasKey("markerType") ? propMap.getString("markerType") : "";
-        switch(markerType) {
+        switch (markerType) {
             case "circle":
                 setCircleMarker(chart);
                 break;
@@ -492,6 +492,15 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
                 }
 
                 axis.setValueFormatter(new DateFormatter(valueFormatterPattern, since, timeUnit, locale));
+            } else if ("dynamicDate".equals(valueFormatter)) {
+                long[] dates = BridgeUtils.convertToLongArray(propMap.getArray("dates"));
+                Locale locale = Locale.getDefault();
+
+                if (BridgeUtils.validate(propMap, ReadableType.String, "locale")) {
+                    locale = Locale.forLanguageTag(propMap.getString("locale"));
+                }
+
+                axis.setValueFormatter(new DynamicChartDateFormatter(dates, locale));
             } else {
                 axis.setValueFormatter(new CustomFormatter(valueFormatter));
             }
@@ -503,7 +512,6 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
             axis.setCenterAxisLabels(propMap.getBoolean("centerAxisLabels"));
         }
     }
-
 
 
     /**
@@ -558,7 +566,8 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
         super.onAfterUpdateTransaction(chart);
         chart.notifyDataSetChanged();
         onAfterDataSetChanged(chart);
-        chart.postInvalidate();;
+        chart.postInvalidate();
+        ;
     }
 
 }

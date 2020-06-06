@@ -233,18 +233,27 @@ class RNBarLineChartViewBase: RNYAxisChartViewBase {
         }
     }
 
-    func updateData(_ data: NSDictionary) {
-        let leftX = barLineChart.lowestVisibleX
-        let json = BridgeUtils.toJson(data)
-        barLineChart.data = dataExtract.extract(json)
+		func updateData(_ data: NSDictionary, config: NSDictionary) {
+				let json = BridgeUtils.toJson(data)
+				let xAxisConfig = BridgeUtils.toJson(config)
+				updateXAxis(xAxisConfig)
+				
+				let leftX = barLineChart.lowestVisibleX
+				barLineChart.data = dataExtract.extract(json)
 
-        if let config = savedVisibleRange {
-            updateVisibleRange(config)
-        }
-        barLineChart.moveViewToX(leftX)
-        barLineChart.notifyDataSetChanged()
-    }
-
+				if let config = savedVisibleRange {
+						updateVisibleRange(config)
+				}
+				barLineChart.moveViewToX(leftX)
+				barLineChart.notifyDataSetChanged()
+		}
+		
+		func updateXAxis(_ config: JSON) {
+				let dates = config["dates"].arrayValue.map({ $0.doubleValue })
+				let locale = config["locale"].string
+				barLineChart.xAxis.valueFormatter = DynamicChartDateFormatter(dates: dates, locale: locale)
+		}
+	
     func setDataAndLockIndex(_ data: NSDictionary) {
         let json = BridgeUtils.toJson(data)
 

@@ -414,6 +414,11 @@ open class RNChartViewBase: UIView, ChartViewDelegate {
               let timeUnit = config["timeUnit"].string != nil ? config["timeUnit"].stringValue : "MILLISECONDS"
               let locale = config["locale"].string;
               axis.valueFormatter = CustomChartDateFormatter(pattern: valueFormatterPattern, since: since, timeUnit: timeUnit, locale: locale);
+            } else if "dynamicDate" == valueFormatter.stringValue {
+                let dates = config["dates"].arrayValue.map({ $0.doubleValue });
+                let locale = config["locale"].string;
+                // get chart data and pass to DynamicChartDateFormatter
+                axis.valueFormatter = DynamicChartDateFormatter(dates: dates, locale: locale);
             } else {
               let customFormatter = NumberFormatter()
               customFormatter.positiveFormat = valueFormatter.stringValue

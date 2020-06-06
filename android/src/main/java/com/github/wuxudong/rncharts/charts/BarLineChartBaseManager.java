@@ -9,6 +9,7 @@ import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.github.mikephil.charting.charts.BarLineChartBase;
 import com.github.mikephil.charting.charts.Chart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.jobs.ZoomJob;
@@ -21,6 +22,7 @@ import com.github.wuxudong.rncharts.listener.RNOnChartGestureListener;
 import com.github.wuxudong.rncharts.utils.BridgeUtils;
 
 import java.lang.reflect.Field;
+import java.util.Locale;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -332,7 +334,7 @@ public abstract class BarLineChartBaseManager<T extends BarLineChartBase, U exte
                 return;
 
             case UPDATE_DATA_INDEX:
-                updateData(root, args.getMap(0));
+                updateData(root, args.getMap(0), args.getMap(1));
                 return;
         }
 
@@ -387,7 +389,8 @@ public abstract class BarLineChartBaseManager<T extends BarLineChartBase, U exte
     }
 
     // similar to setDataAndLock index, but doesn't adjust the chart scale
-    private void updateData(T root, ReadableMap map) {
+    private void updateData(T root, ReadableMap map, ReadableMap config) {
+        updateXAxis(root.getXAxis(), config);
         YAxis.AxisDependency axisDependency = root.getAxisLeft().isEnabled() ? YAxis.AxisDependency.LEFT : YAxis.AxisDependency.RIGHT;
         Transformer transformer = root.getTransformer(axisDependency);
 
@@ -423,6 +426,17 @@ public abstract class BarLineChartBaseManager<T extends BarLineChartBase, U exte
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void updateXAxis(AxisBase xAxis, ReadableMap config) {
+        long[] dates = BridgeUtils.convertToLongArray(config.getArray("dates"));
+        Locale locale = Locale.getDefault();
+
+        if (BridgeUtils.validate(config, ReadableType.String, "locale")) {
+            locale = Locale.forLanguageTag(config.getString("locale"));
+        }
+
+        xAxis.setValueFormatter(new DynamicChartDateFormatter(dates, locale));
     }
 
     private double getVisibleYRange(T chart, YAxis.AxisDependency axisDependency) {

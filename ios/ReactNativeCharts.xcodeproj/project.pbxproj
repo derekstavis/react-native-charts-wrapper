@@ -18,6 +18,7 @@
 		3FF6BE052481DB980012D6EC /* RNChartViewBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6BDF62481DB970012D6EC /* RNChartViewBase.swift */; };
 		3FF6BE062481DB980012D6EC /* RNYAxisChartViewBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6BDF92481DB970012D6EC /* RNYAxisChartViewBase.swift */; };
 		3FF6BE072481DB980012D6EC /* CustomChartDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6BDFA2481DB970012D6EC /* CustomChartDateFormatter.swift */; };
+		3FF87042248ACAC20032FCB8 /* DynamicChartDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF87041248ACAC20032FCB8 /* DynamicChartDateFormatter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -60,6 +61,7 @@
 		3FF6BDFA2481DB970012D6EC /* CustomChartDateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomChartDateFormatter.swift; sourceTree = "<group>"; };
 		3FF6BDFB2481DB980012D6EC /* line */ = {isa = PBXFileReference; lastKnownFileType = folder; path = line; sourceTree = "<group>"; };
 		3FF6BDFC2481DB980012D6EC /* scatter */ = {isa = PBXFileReference; lastKnownFileType = folder; path = scatter; sourceTree = "<group>"; };
+		3FF87041248ACAC20032FCB8 /* DynamicChartDateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicChartDateFormatter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 				3FF6BDFC2481DB980012D6EC /* scatter */,
 				3FF6BDE72481DB970012D6EC /* utils */,
 				3FF6BDE32481DB960012D6EC /* ReactNativeCharts-Bridging-Header.h */,
+				3FF87041248ACAC20032FCB8 /* DynamicChartDateFormatter.swift */,
 			);
 			path = ReactNativeCharts;
 			sourceTree = "<group>";
@@ -187,6 +190,7 @@
 				3FF6BE032481DB980012D6EC /* CircleMarker.swift in Sources */,
 				3FF6BE002481DB980012D6EC /* IndexValueFormatter.swift in Sources */,
 				3FF6BE022481DB980012D6EC /* BalloonMarker.swift in Sources */,
+				3FF87042248ACAC20032FCB8 /* DynamicChartDateFormatter.swift in Sources */,
 				3FF6BDFD2481DB980012D6EC /* RNBarLineChartViewBase.swift in Sources */,
 				3FF6BE062481DB980012D6EC /* RNYAxisChartViewBase.swift in Sources */,
 				3FF6BDFE2481DB980012D6EC /* RNBarLineChartBaseManager.swift in Sources */,
