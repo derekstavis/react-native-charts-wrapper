@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3FDDA86D2493003800A0CFB7 /* CustomYAxisRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDDA86C2493003800A0CFB7 /* CustomYAxisRenderer.swift */; };
 		3FF6BDFD2481DB980012D6EC /* RNBarLineChartViewBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6BDE82481DB970012D6EC /* RNBarLineChartViewBase.swift */; };
 		3FF6BDFE2481DB980012D6EC /* RNBarLineChartBaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6BDE92481DB970012D6EC /* RNBarLineChartBaseManager.swift */; };
 		3FF6BDFF2481DB980012D6EC /* ChartGroupHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6BDEA2481DB970012D6EC /* ChartGroupHolder.swift */; };
@@ -34,6 +35,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3FDDA86C2493003800A0CFB7 /* CustomYAxisRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomYAxisRenderer.swift; sourceTree = "<group>"; };
 		3FF6BDD92481DAF30012D6EC /* libReactNativeCharts.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libReactNativeCharts.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FF6BDE32481DB960012D6EC /* ReactNativeCharts-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ReactNativeCharts-Bridging-Header.h"; sourceTree = "<group>"; };
 		3FF6BDE42481DB970012D6EC /* RNCharts-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RNCharts-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				3FF6BDE72481DB970012D6EC /* utils */,
 				3FF6BDE32481DB960012D6EC /* ReactNativeCharts-Bridging-Header.h */,
 				3FF87041248ACAC20032FCB8 /* DynamicChartDateFormatter.swift */,
+				3FDDA86C2493003800A0CFB7 /* CustomYAxisRenderer.swift */,
 			);
 			path = ReactNativeCharts;
 			sourceTree = "<group>";
@@ -186,6 +189,7 @@
 				3FF6BE072481DB980012D6EC /* CustomChartDateFormatter.swift in Sources */,
 				3FF6BE012481DB980012D6EC /* DataExtract.swift in Sources */,
 				3FF6BDFF2481DB980012D6EC /* ChartGroupHolder.swift in Sources */,
+				3FDDA86D2493003800A0CFB7 /* CustomYAxisRenderer.swift in Sources */,
 				3FF6BE042481DB980012D6EC /* ConfigurableMinimumLinePositionFillFormatter.swift in Sources */,
 				3FF6BE032481DB980012D6EC /* CircleMarker.swift in Sources */,
 				3FF6BE002481DB980012D6EC /* IndexValueFormatter.swift in Sources */,

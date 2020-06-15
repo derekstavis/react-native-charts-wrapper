@@ -84,6 +84,8 @@
 | `position`    | `number`                                                                              |         |      |
 | `maxWidth`    | `bool`                                                                                |         |      |
 | `minWidth`    | `string`                                                                              |         |      |
+| `strokeColor` | `number`                                                                              | white   |      |
+| `strokeWidth` | `number`                                                                              |   0     |      |
 | `zeroLine`    | `{`<br />`enabled: bool,`<br />`lineWidth: number,`<br />`lineColor: number`<br />`}` |         |      |
 
 ## Chart Base (All charts have these props)
