@@ -460,6 +460,16 @@ open class RNChartViewBase: UIView, ChartViewDelegate {
             chart.marker = marker
             marker.chartView = chart
 
+        case "bubble":
+            let marker = BubbleMarker(
+                color: RCTConvert.uiColor(json["markerColor"].intValue),
+                font: markerFont,
+                textColor: RCTConvert.uiColor(json["textColor"].intValue),
+                textAlign: RCTConvert.nsTextAlignment(json["textAlign"].stringValue)
+            )
+            chart.marker = marker
+            marker.chartView = chart
+
         default:
             let marker = BalloonMarker(
                 color: RCTConvert.uiColor(json["markerColor"].intValue),

@@ -14,10 +14,11 @@ class RNBarLineChartViewBase: RNYAxisChartViewBase {
         }
     }
     
+    internal var _longPressGestureRecognizer: UILongPressGestureRecognizer!
     var savedVisibleRange : NSDictionary?
 
     var savedZoom : NSDictionary?
-  
+
     var _onYaxisMinMaxChange : RCTBubblingEventBlock?
     var timer : Timer?
 
@@ -46,12 +47,12 @@ class RNBarLineChartViewBase: RNYAxisChartViewBase {
       if callback == nil {
         return;
       }
-      
+
       var lastMin: Double = 0;
       var lastMax: Double = 0;
-      
+
       let axis = (self.chart as! BarLineChartViewBase).getAxis(.right);
-        
+
       if #available(iOS 10.0, *) {
         // Interval for 16ms
         self.timer = Timer.scheduledTimer(withTimeInterval: 1/60, repeats: true) { timer in
@@ -59,7 +60,7 @@ class RNBarLineChartViewBase: RNYAxisChartViewBase {
           let maximum = axis.axisMaximum;
           if lastMin != minimum || lastMax != maximum {
             print("Update the view", minimum, lastMin, maximum, lastMax)
-            
+
             guard let callback = self._onYaxisMinMaxChange else {
               return;
             }
@@ -95,7 +96,7 @@ class RNBarLineChartViewBase: RNYAxisChartViewBase {
     }
 
     func setBorderColor(_ color: Int) {
-        
+
         barLineChart.borderColor = RCTConvert.uiColor(color);
     }
 
@@ -107,15 +108,15 @@ class RNBarLineChartViewBase: RNYAxisChartViewBase {
     func setMaxVisibleValueCount(_ count: NSInteger) {
         barLineChart.maxVisibleCount = count;
     }
-    
+
     func setVisibleRange(_ config: NSDictionary) {
         // delay visibleRange handling until chart data is set
         savedVisibleRange = config
     }
-    
+
     func updateVisibleRange(_ config: NSDictionary) {
         let json = BridgeUtils.toJson(config)
-        
+
         let x = json["x"]
         if x["min"].double != nil {
             barLineChart.setVisibleXRangeMinimum(x["min"].doubleValue)
@@ -123,7 +124,7 @@ class RNBarLineChartViewBase: RNYAxisChartViewBase {
         if x["max"].double != nil {
             barLineChart.setVisibleXRangeMaximum(x["max"].doubleValue)
         }
-        
+
         let y = json["y"]
         if y["left"]["min"].double != nil {
             barLineChart.setVisibleYRangeMinimum(y["left"]["min"].doubleValue, axis: YAxis.AxisDependency.left)
@@ -131,7 +132,7 @@ class RNBarLineChartViewBase: RNYAxisChartViewBase {
         if y["left"]["max"].double != nil {
             barLineChart.setVisibleYRangeMaximum(y["left"]["max"].doubleValue, axis: YAxis.AxisDependency.left)
         }
-        
+
         if y["right"]["min"].double != nil {
             barLineChart.setVisibleYRangeMinimum(y["right"]["min"].doubleValue, axis: YAxis.AxisDependency.right)
         }
@@ -139,7 +140,7 @@ class RNBarLineChartViewBase: RNYAxisChartViewBase {
             barLineChart.setVisibleYRangeMaximum(y["right"]["max"].doubleValue, axis: YAxis.AxisDependency.right)
         }
     }
-    
+
     func setAutoScaleMinMaxEnabled(_  enabled: Bool) {
         barLineChart.autoScaleMinMaxEnabled = enabled
     }
@@ -167,6 +168,48 @@ class RNBarLineChartViewBase: RNYAxisChartViewBase {
 
     func setPinchZoom(_  enabled: Bool) {
         barLineChart.pinchZoomEnabled = enabled
+    }
+
+    func setHighlightLongPressDragEnabled(_  enabled: Bool) {
+            if enabled {
+                _longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressGestureRecognizer(_:)))
+                self.chart.addGestureRecognizer(_longPressGestureRecognizer)
+            } else {
+                self.chart.removeGestureRecognizer(_longPressGestureRecognizer)
+        }
+    }
+
+    @objc private func longPressGestureRecognizer(_ gesture: UILongPressGestureRecognizer) {
+        if self.chart.data === nil {
+            return
+        }
+
+        if gesture.state == .changed || gesture.state == .began {
+            // update gesture when location changes
+            guard let h = self.chart.getHighlightByTouchPoint(gesture.location(in: self)) else {
+                self.chart.lastHighlighted = nil
+                self.chart.highlightValue(nil, callDelegate: true)
+                return
+            }
+            let lastHighlighted = self.chart.lastHighlighted
+            let rightAxisTransformer = self.barLineChart.getTransformer(forAxis: .right)
+            let touchPoint = gesture.location(in: self)
+            let clampedTouchPoint = CGPoint(x: touchPoint.x, y: max(min(touchPoint.y, self.chart.viewPortHandler.contentBottom), self.chart.bounds.minY))
+
+            let value = rightAxisTransformer.valueForTouchPoint(clampedTouchPoint)
+
+            let highlight = Highlight(x: h.x, y: Double(value.y), xPx: h.xPx, yPx: touchPoint.y, dataIndex: h.dataIndex, dataSetIndex: h.dataSetIndex, stackIndex: -1, axis: h.axis)
+
+            if highlight != lastHighlighted {
+                self.chart.lastHighlighted = highlight
+                // only call delegate when the x value changes (don't want to spam when y changes)
+                self.chart.highlightValue(highlight, callDelegate: highlight.x != lastHighlighted?.x)
+            }
+        } else if gesture.state == .ended {
+            // remove highlight after gesture
+            self.chart.lastHighlighted = nil
+            self.chart.highlightValue(nil, callDelegate: true)
+        }
     }
 
     func setHighlightPerDragEnabled(_  enabled: Bool) {

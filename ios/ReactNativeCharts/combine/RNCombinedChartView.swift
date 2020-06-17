@@ -20,7 +20,7 @@ class RNCombinedChartView: RNBarLineChartViewBase {
 
     override init(frame: CoreGraphics.CGRect) {
 
-        self._chart = CombinedChartView(frame: frame)
+        self._chart = BFCombinedChartView(frame: frame)
         self._dataExtract = CombinedDataExtract()
 
         super.init(frame: frame)

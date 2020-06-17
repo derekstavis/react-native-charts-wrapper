@@ -20,6 +20,7 @@ class RNLineChartView: RNBarLineChartViewBase {
     override init(frame: CoreGraphics.CGRect) {
         
         self._chart = LineChartView(frame: frame)
+        self._chart.renderer = BFLineChartRenderer(dataProvider: self._chart, animator: self._chart.chartAnimator, viewPortHandler: self._chart.viewPortHandler)
         self._dataExtract = LineDataExtract()
         
         super.init(frame: frame);
