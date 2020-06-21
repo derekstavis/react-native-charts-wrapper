@@ -25,6 +25,7 @@ import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.wuxudong.rncharts.data.DataExtract;
+import com.github.wuxudong.rncharts.markers.RNBubbleMarkerView;
 import com.github.wuxudong.rncharts.markers.RNRectangleMarkerView;
 import com.github.wuxudong.rncharts.markers.RNCircleMarkerView;
 import com.github.wuxudong.rncharts.utils.BridgeUtils;
@@ -272,9 +273,19 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
             case "circle":
                 setCircleMarker(chart);
                 break;
+            case "bubble":
+                setBubbleMarker(chart, propMap);
+                break;
             default:
                 setRectangleMarker(chart, propMap);
         }
+    }
+
+    private void setBubbleMarker(Chart chart, ReadableMap propMap) {
+        RNBubbleMarkerView marker = new RNBubbleMarkerView(chart.getContext(), propMap.getInt("markerColor"), propMap.getInt("textColor"), propMap.getInt("textSize"));
+        chart.setMarker(marker);
+        marker.setChartView(chart);
+        chart.setMarker(marker);
     }
 
     private void setRectangleMarker(Chart chart, ReadableMap propMap) {
@@ -359,7 +370,7 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
             axis.setTypeface(TypefaceUtils.getTypeface(chart, propMap));
         }
         if (BridgeUtils.validate(propMap, ReadableType.Number, "yOffset")) {
-            axis.setYOffset((float)(propMap.getDouble("yOffset")));
+            axis.setYOffset((float) (propMap.getDouble("yOffset")));
         }
         if (BridgeUtils.validate(propMap, ReadableType.Number, "gridColor")) {
             axis.setGridColor(propMap.getInt("gridColor"));

@@ -262,7 +262,10 @@ type barLineScatterCandleBubble { highlightColor: number }
 type lineScatterCandleRadar {
   drawVerticalHighlightIndicator: bool,
   drawHorizontalHighlightIndicator: bool,
-  highlightLineWidth: number
+  highlightLineWidth: number,
+  // Note: only first lineLength and spaceLength will be used on android
+  highlightLineDashLengths: Array // [lineLength, spaceLength, ...]
+
 }
 ```
 

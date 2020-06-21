@@ -19,6 +19,7 @@ import com.github.mikephil.charting.renderer.YAxisRenderer;
 import com.github.mikephil.charting.utils.MPPointD;
 import com.github.mikephil.charting.utils.MPPointF;
 import com.github.mikephil.charting.utils.Transformer;
+import com.github.wuxudong.rncharts.listener.RNBarLineChartTouchListener;
 import com.github.wuxudong.rncharts.listener.RNOnChartGestureListener;
 import com.github.wuxudong.rncharts.utils.BridgeUtils;
 
@@ -174,6 +175,11 @@ public abstract class BarLineChartBaseManager<T extends BarLineChartBase, U exte
     @ReactProp(name = "dragEnabled")
     public void setDragEnabled(BarLineChartBase chart, boolean enabled) {
         chart.setDragEnabled(enabled);
+    }
+
+    @ReactProp(name = "highlightLongPressDragEnabled")
+    public void setHighlightLongPressDragEnabled(BarLineChartBase chart, boolean enabled) {
+        chart.setOnTouchListener(new RNBarLineChartTouchListener(chart, chart.getViewPortHandler().getMatrixTouch(), 3f, enabled));
     }
 
     @ReactProp(name = "highlightPerDragEnabled")

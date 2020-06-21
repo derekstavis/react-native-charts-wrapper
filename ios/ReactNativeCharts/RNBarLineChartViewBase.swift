@@ -192,11 +192,11 @@ class RNBarLineChartViewBase: RNYAxisChartViewBase {
                 return
             }
             let lastHighlighted = self.chart.lastHighlighted
-            let rightAxisTransformer = self.barLineChart.getTransformer(forAxis: .right)
+            let axisTransformer = self.barLineChart.getTransformer(forAxis: h.axis)
             let touchPoint = gesture.location(in: self)
             let clampedTouchPoint = CGPoint(x: touchPoint.x, y: max(min(touchPoint.y, self.chart.viewPortHandler.contentBottom), self.chart.bounds.minY))
 
-            let value = rightAxisTransformer.valueForTouchPoint(clampedTouchPoint)
+            let value = axisTransformer.valueForTouchPoint(clampedTouchPoint)
 
             let highlight = Highlight(x: h.x, y: Double(value.y), xPx: h.xPx, yPx: touchPoint.y, dataIndex: h.dataIndex, dataSetIndex: h.dataSetIndex, stackIndex: -1, axis: h.axis)
 

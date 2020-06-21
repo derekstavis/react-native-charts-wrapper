@@ -3,20 +3,20 @@ package com.github.wuxudong.rncharts.charts;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 public class DynamicChartDateFormatter extends ValueFormatter {
-    private Locale locale;
+    private SimpleDateFormat mSimpleDateFormat;
+    private Calendar mCalendar = Calendar.getInstance();
 
     long[] dates;
 
     public DynamicChartDateFormatter(long[] dates, Locale locale) {
         this.dates = dates;
-        this.locale = locale;
+        this.mSimpleDateFormat = new SimpleDateFormat("HH:mm", locale);
     }
 
     @Override
@@ -51,10 +51,9 @@ public class DynamicChartDateFormatter extends ValueFormatter {
 
         Date previousDate = new Date(dates[previousDateIndex]);
 
-        String pattern = getFormatPattern(date, previousDate);
+        getFormatPattern(date, previousDate);
 
-        DateFormat dateFormat = new SimpleDateFormat(pattern, locale);
-        return dateFormat.format(date);
+        return mSimpleDateFormat.format(date);
     }
 
     private int getEntryIndexForValue(float value, AxisBase axis) {
@@ -67,31 +66,31 @@ public class DynamicChartDateFormatter extends ValueFormatter {
     }
 
     // If value diff > year
-        // return year number
+    // return year number
     // If value diff > month
-        // return month number
+    // return month number
     // If value diff > day
-        // return day number
+    // return day number
     // else
-        // return HH:mm
-    private String getFormatPattern(Date date1, Date date2) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date1);
-        int year1 = calendar.get(Calendar.YEAR);
-        int month1 = calendar.get(Calendar.MONTH);
-        int day1 = calendar.get(Calendar.DAY_OF_MONTH);
-        calendar.setTime(date2);
-        int year2 = calendar.get(Calendar.YEAR);
-        int month2 = calendar.get(Calendar.MONTH);
-        int day2 = calendar.get(Calendar.DAY_OF_MONTH);
+    // return HH:mm
+    private void getFormatPattern(Date date1, Date date2) {
+        mCalendar.setTime(date1);
+        int year1 = mCalendar.get(Calendar.YEAR);
+        int month1 = mCalendar.get(Calendar.MONTH);
+        int day1 = mCalendar.get(Calendar.DAY_OF_MONTH);
+        mCalendar.setTime(date2);
+        int year2 = mCalendar.get(Calendar.YEAR);
+        int month2 = mCalendar.get(Calendar.MONTH);
+        int day2 = mCalendar.get(Calendar.DAY_OF_MONTH);
 
         if (year1 != year2) {
-            return "yyyy";
+            mSimpleDateFormat.applyPattern("yyyy");
         } else if (month1 != month2) {
-            return "MMM";
+            mSimpleDateFormat.applyPattern("MMM");
         } else if (day1 != day2) {
-            return "d";
+            mSimpleDateFormat.applyPattern("d");
+        } else {
+            mSimpleDateFormat.applyPattern("HH:mm");
         }
-        return "HH:mm";
     }
 }

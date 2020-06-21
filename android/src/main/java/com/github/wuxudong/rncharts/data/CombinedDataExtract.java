@@ -23,7 +23,7 @@ public class CombinedDataExtract extends DataExtract<CombinedData, Entry> {
 
     @Override
     public CombinedData extract(Chart chart, ReadableMap propMap) {
-        CombinedData chartData = new CombinedData();
+        CustomCombinedData chartData = new CustomCombinedData();
 
         if (BridgeUtils.validate(propMap, ReadableType.Map, "lineData")) {
             chartData.setData(lineDataExtract.extract(chart, propMap.getMap("lineData")));
