@@ -186,15 +186,16 @@ class RNBarLineChartViewBase: RNYAxisChartViewBase {
 
         if gesture.state == .changed || gesture.state == .began {
             // update gesture when location changes
-            guard let h = self.chart.getHighlightByTouchPoint(gesture.location(in: self)) else {
+            let touchPoint = gesture.location(in: self)
+            let clampedTouchPoint = CGPoint(x: touchPoint.x, y: max(min(touchPoint.y, self.chart.viewPortHandler.contentBottom), self.chart.viewPortHandler.contentTop))
+
+            guard let h = self.chart.getHighlightByTouchPoint(clampedTouchPoint) else {
                 self.chart.lastHighlighted = nil
                 self.chart.highlightValue(nil, callDelegate: true)
                 return
             }
             let lastHighlighted = self.chart.lastHighlighted
             let axisTransformer = self.barLineChart.getTransformer(forAxis: h.axis)
-            let touchPoint = gesture.location(in: self)
-            let clampedTouchPoint = CGPoint(x: touchPoint.x, y: max(min(touchPoint.y, self.chart.viewPortHandler.contentBottom), self.chart.bounds.minY))
 
             let value = axisTransformer.valueForTouchPoint(clampedTouchPoint)
 

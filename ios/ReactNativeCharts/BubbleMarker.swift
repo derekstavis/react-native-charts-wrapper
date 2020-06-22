@@ -46,24 +46,20 @@ open class BubbleMarker: MarkerView {
     }
 
 
-	// TODO make the left and right rect keep the label pressed against the side (jarring otherwise)
-    func drawXHighlightRect(context: CGContext, point: CGPoint) -> CGRect{
+	func drawXHighlightRect(context: CGContext, point: CGPoint) -> CGRect{
 
         let chart = super.chartView
-
         let width = _sizeXLabel.width
 
-
         var rect = CGRect(origin: point, size: _sizeXLabel)
+        rect.origin.x -= _sizeXLabel.width / 2.0
 
         rect.origin.y = chart?.bounds.minY ?? 0
 
         if (chart != nil && point.x + width - _sizeXLabel.width / 2.0 > (chart?.bounds.width)!) {
-            // rect is right
-            rect.origin.x -= _sizeXLabel.width
-        } else if point.x - _sizeXLabel.width / 2.0 >= 0 {
-            // rect is center
-            rect.origin.x -= _sizeXLabel.width / 2.0
+            rect.origin.x = (chart?.viewPortHandler.contentRight)! - _sizeXLabel.width
+        } else if point.x - _sizeXLabel.width / 2.0 < 0 {
+            rect.origin.x = (chart?.viewPortHandler.contentLeft)!
         }
         drawRect(context: context, rect: rect)
 
@@ -78,16 +74,21 @@ open class BubbleMarker: MarkerView {
 
         var rect = CGRect(origin: point, size: _sizeYLabel)
 
-        rect.origin.x = chart?.bounds.maxX ?? 0
-        rect.origin.x -= _sizeYLabel.width
+        rect.origin.x = (chart?.viewPortHandler.contentRight)! - _sizeYLabel.width
         rect.origin.y -= _sizeYLabel.height / 2.0
+
+        if rect.origin.y < (chart?.viewPortHandler.contentTop)! {
+            rect.origin.y = (chart?.viewPortHandler.contentTop)!
+        } else if rect.origin.y + _sizeYLabel.height > (chart?.viewPortHandler.contentBottom)! {
+            rect.origin.y = (chart?.viewPortHandler.contentBottom)! - _sizeYLabel.height
+        }
         drawRect(context: context, rect: rect)
 
         rect.origin.y += self.insets.top
         rect.size.height -= self.insets.top + self.insets.bottom
 
         return rect
-	}
+    }
 
 	func drawRect(context: CGContext, rect: CGRect) {
 		context.setFillColor((color?.cgColor)!)
@@ -105,15 +106,11 @@ open class BubbleMarker: MarkerView {
 
         let rectX = drawXHighlightRect(context: context, point: point)
 
-        let rectY = drawYHighlightRect(context: context, point: point)
-
-        UIGraphicsPushContext(context)
-
         labelX?.draw(in: rectX, withAttributes: _drawAttributes)
 
-        labelY?.draw(in: rectY, withAttributes: _drawAttributes)
+        let rectY = drawYHighlightRect(context: context, point: point)
 
-        UIGraphicsPopContext()
+        labelY?.draw(in: rectY, withAttributes: _drawAttributes)
 
         context.restoreGState()
     }

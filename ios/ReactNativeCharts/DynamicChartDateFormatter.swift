@@ -22,7 +22,6 @@ extension Date {
 
 // assumes values are -Index
 // TODO take timeUnit
-// TODO clean up
 open class DynamicChartDateFormatter: NSObject, IValueFormatter, IAxisValueFormatter {
     
     open var dateFormatter = DateFormatter()
@@ -35,6 +34,7 @@ open class DynamicChartDateFormatter: NSObject, IValueFormatter, IAxisValueForma
     
     public init(dates: [Double], locale: String?) {
         self.dates = dates
+        self.dateFormatter.timeZone = TimeZone.current
         self.dateFormatter.locale = Locale(identifier: locale ?? Locale.current.languageCode ?? "en_US")
     }
 

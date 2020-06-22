@@ -87,21 +87,38 @@ public class RNBubbleMarkerView extends MarkerView {
     }
 
     private void drawVerticalMarkerRect(Canvas canvas, float posX) {
+        BarLineChartBase chart = (BarLineChartBase) super.getChartView();
+        float totalWidth = mVerticalMarkerTextBounds.width() + insets.getTotalHorizontalInset();
         int sideOffset = mVerticalMarkerTextBounds.width() >> 1;
-
         float rectHeight = mVerticalMarkerTextBounds.height() + insets.getTotalVerticalInset();
         float cornerRadius = rectHeight / 2;
-        canvas.drawRoundRect(posX - sideOffset - insets.left, 0, posX + sideOffset + insets.right, rectHeight, cornerRadius, cornerRadius, mRectPaint);
-        canvas.drawText(mVerticalMarkerText, posX - mVerticalMarkerTextBounds.exactCenterX(), mVerticalMarkerTextBounds.height() + insets.top, mTextPaint);
+        float left = posX - (sideOffset + insets.left);
+
+        if (posX + sideOffset + insets.right > chart.getViewPortHandler().contentRight()) {
+            left = chart.getViewPortHandler().contentRight() - totalWidth;
+        } else if (posX - (sideOffset + insets.left) < chart.getViewPortHandler().contentLeft()) {
+            left = chart.getViewPortHandler().contentLeft();
+        }
+
+        canvas.drawRoundRect(left, 0, left + totalWidth, rectHeight, cornerRadius, cornerRadius, mRectPaint);
+        canvas.drawText(mVerticalMarkerText, left + insets.left, mVerticalMarkerTextBounds.height() + insets.top, mTextPaint);
     }
 
     private void drawHorizontalMarkerRect(Canvas canvas, float posY) {
+        BarLineChartBase chart = (BarLineChartBase) super.getChartView();
         float rectHeight = mHorizontalMarkerTextBounds.height() + insets.getTotalVerticalInset();
         float rectWidth = mHorizontalMarkerTextBounds.width() + insets.getTotalHorizontalInset();
-        float rectBottom = posY - rectHeight / 2;
+        float rectTop = posY - rectHeight / 2;
         float cornerRadius = rectHeight / 2;
-        canvas.drawRoundRect(canvas.getWidth() - rectWidth, rectBottom, canvas.getWidth(), rectBottom + rectHeight, cornerRadius, cornerRadius, mRectPaint);
-        canvas.drawText(mHorizontalMarkerText, canvas.getWidth() - mHorizontalMarkerTextBounds.width() - insets.right, rectBottom + mHorizontalMarkerTextBounds.height() + insets.top, mTextPaint);
+
+        if (rectTop < chart.getViewPortHandler().contentTop()) {
+            rectTop = chart.getViewPortHandler().contentTop();
+        } else if (rectTop + rectHeight > chart.getViewPortHandler().contentBottom()) {
+            rectTop = chart.getViewPortHandler().contentBottom() - rectHeight;
+        }
+
+        canvas.drawRoundRect(canvas.getWidth() - rectWidth, rectTop, canvas.getWidth(), rectTop + rectHeight, cornerRadius, cornerRadius, mRectPaint);
+        canvas.drawText(mHorizontalMarkerText, canvas.getWidth() - mHorizontalMarkerTextBounds.width() - insets.right, rectTop + mHorizontalMarkerTextBounds.height() + insets.top, mTextPaint);
     }
 
 }
