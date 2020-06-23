@@ -13,7 +13,10 @@ class RNBarLineChartViewBase: RNYAxisChartViewBase {
             return chart as! BarLineChartViewBase
         }
     }
-    
+
+    @available(iOS 10.0, *)
+    private(set) lazy var feedbackGenerator = UISelectionFeedbackGenerator()
+
     internal var _longPressGestureRecognizer: UILongPressGestureRecognizer!
     var savedVisibleRange : NSDictionary?
 
@@ -203,8 +206,13 @@ class RNBarLineChartViewBase: RNYAxisChartViewBase {
 
             if highlight != lastHighlighted {
                 self.chart.lastHighlighted = highlight
+                let xChanged = highlight.x != lastHighlighted?.x
+                if xChanged, #available(iOS 10.0, *) {
+                    // TODO move haptics to its own property?
+                    feedbackGenerator.selectionChanged()
+                }
                 // only call delegate when the x value changes (don't want to spam when y changes)
-                self.chart.highlightValue(highlight, callDelegate: highlight.x != lastHighlighted?.x)
+                self.chart.highlightValue(highlight, callDelegate: xChanged)
             }
         } else if gesture.state == .ended {
             // remove highlight after gesture

@@ -3,6 +3,7 @@ package com.github.wuxudong.rncharts.listener;
 import android.annotation.SuppressLint;
 import android.graphics.Matrix;
 import android.util.Log;
+import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -526,7 +527,11 @@ public class RNBarLineChartTouchListener extends ChartTouchListener<BarLineChart
         highlight.setDataIndex(h.getDataIndex());
         if (shouldHighlightChange(highlight, lastHighlight)) {
             mLastHighlighted = highlight;
-            mChart.highlightValue(highlight, lastHighlight == null || highlight.getX() != lastHighlight.getX());
+            boolean xChanged = lastHighlight == null || highlight.getX() != lastHighlight.getX();
+            if (xChanged) {
+                mChart.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            }
+            mChart.highlightValue(highlight, xChanged);
         }
     }
 
