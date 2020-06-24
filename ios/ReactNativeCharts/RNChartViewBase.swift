@@ -20,6 +20,8 @@ open class RNChartViewBase: UIView, ChartViewDelegate {
 
     open var onGestureEnd: RCTDirectEventBlock?
 
+    internal var hapticsEnabled = true
+
     private var group: String?
 
     private  var identifier: String?

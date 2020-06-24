@@ -207,7 +207,7 @@ class RNBarLineChartViewBase: RNYAxisChartViewBase {
             if highlight != lastHighlighted {
                 self.chart.lastHighlighted = highlight
                 let xChanged = highlight.x != lastHighlighted?.x
-                if xChanged, #available(iOS 10.0, *) {
+                if self.hapticsEnabled && xChanged, #available(iOS 10.0, *) {
                     // TODO move haptics to its own property?
                     feedbackGenerator.selectionChanged()
                 }

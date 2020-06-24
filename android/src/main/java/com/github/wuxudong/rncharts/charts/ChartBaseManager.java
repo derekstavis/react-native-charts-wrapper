@@ -545,6 +545,11 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
         chart.setData(getDataExtract().extract(chart, propMap));
     }
 
+    @ReactProp(name = "hapticsEnabled")
+    public void setHapticsEnabled(Chart chart, boolean enabled) {
+        chart.setHapticFeedbackEnabled(enabled);
+    }
+
     @ReactProp(name = "highlights")
     public void setHighlights(T chart, ReadableArray array) {
         List<Highlight> highlights = new ArrayList<>();
