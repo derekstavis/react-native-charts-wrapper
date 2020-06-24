@@ -18,6 +18,8 @@ open class RNChartViewBase: UIView, ChartViewDelegate {
 
     open var onChange:RCTBubblingEventBlock?
 
+    open var onGestureEnd: RCTDirectEventBlock?
+
     private var group: String?
 
     private  var identifier: String?
@@ -502,6 +504,18 @@ open class RNChartViewBase: UIView, ChartViewDelegate {
         } else {
             self.onSelect!(nil)
 
+        }
+    }
+
+    @objc public func chartViewDidEndPinchGesture(_ chartView: ChartViewBase) {
+    		if (self.onGestureEnd != nil) {
+    				self.onGestureEnd!(["action": "pinch"])
+    		}
+    	}
+
+    @objc public func chartViewDidEndPanning(_ chartView: ChartViewBase) {
+        if (self.onGestureEnd != nil) {
+                self.onGestureEnd!(["action": "chartTranslated"])
         }
     }
 

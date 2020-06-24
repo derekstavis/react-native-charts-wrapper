@@ -83,7 +83,7 @@ open class CustomYAxisRenderer : YAxisRenderer {
 	}
 
 	/// draws the y-labels on the specified x-position
-	internal func drawYLabels(
+	open override func drawYLabels(
 			context: CGContext,
 			fixedPosition: CGFloat,
 			positions: [CGPoint],

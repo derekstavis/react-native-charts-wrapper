@@ -25,6 +25,7 @@ RCT_EXPORT_VIEW_PROPERTY(xAxis, NSDictionary) \
 RCT_EXPORT_VIEW_PROPERTY(marker, NSDictionary) \
 RCT_EXPORT_VIEW_PROPERTY(onSelect, RCTDirectEventBlock) \
 RCT_EXPORT_VIEW_PROPERTY(onChange, RCTBubblingEventBlock) \
+RCT_EXPORT_VIEW_PROPERTY(onGestureEnd, RCTDirectEventBlock) \
 RCT_EXPORT_VIEW_PROPERTY(group, NSString) \
 RCT_EXPORT_VIEW_PROPERTY(identifier, NSString) \
 RCT_EXPORT_VIEW_PROPERTY(syncX, BOOL) \

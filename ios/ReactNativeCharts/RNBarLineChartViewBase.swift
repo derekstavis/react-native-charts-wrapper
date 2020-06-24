@@ -218,6 +218,9 @@ class RNBarLineChartViewBase: RNYAxisChartViewBase {
             // remove highlight after gesture
             self.chart.lastHighlighted = nil
             self.chart.highlightValue(nil, callDelegate: true)
+            if (self.onGestureEnd != nil) {
+                self.onGestureEnd!(["action": "longPressDrag"])
+            }
         }
     }
 

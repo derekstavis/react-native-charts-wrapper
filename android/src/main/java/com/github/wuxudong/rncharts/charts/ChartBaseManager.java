@@ -7,6 +7,7 @@ import android.view.View;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.github.mikephil.charting.animation.Easing;
@@ -35,6 +36,7 @@ import com.github.wuxudong.rncharts.utils.TypefaceUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends SimpleViewManager<T> {
@@ -51,6 +53,16 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
     protected static final int UPDATE_DATA_INDEX = 10;
 
     abstract DataExtract getDataExtract();
+
+    public Map getExportedCustomBubblingEventTypeConstants() {
+        return MapBuilder.builder()
+                .put(
+                        "onGestureEnd",
+                        MapBuilder.of(
+                                "phasedRegistrationNames",
+                                MapBuilder.of("bubbled", "onGestureEnd")))
+                .build();
+    }
 
     /**
      * More details about legend customization: https://github.com/PhilJay/MPAndroidChart/wiki/Legend
