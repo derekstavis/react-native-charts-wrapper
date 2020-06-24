@@ -38,7 +38,7 @@ class RNBarLineChartViewBase: RNYAxisChartViewBase {
 
         if json["right"].exists() {
             let rightAxis = barLineChart.rightAxis
-            barLineChart.leftYAxisRenderer = CustomYAxisRenderer(viewPortHandler: barLineChart.viewPortHandler, yAxis: rightAxis, transformer: barLineChart.getTransformer(forAxis: YAxis.AxisDependency.right), config: json["right"])
+            barLineChart.rightYAxisRenderer = CustomYAxisRenderer(viewPortHandler: barLineChart.viewPortHandler, yAxis: rightAxis, transformer: barLineChart.getTransformer(forAxis: YAxis.AxisDependency.right), config: json["right"])
             setCommonAxisConfig(rightAxis, config: json["right"]);
             setYAxisConfig(rightAxis, config: json["right"]);
         }

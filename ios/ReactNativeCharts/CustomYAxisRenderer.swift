@@ -13,7 +13,7 @@ import SwiftyJSON
  * Adds support for rendering YAxis labels with outer stroke
  */
 open class CustomYAxisRenderer : YAxisRenderer {
-	open var labelStrokeWidth: NSNumber = 0
+	open var labelStrokeWidth: NSNumber?
 	open var labelStrokeColor = UIColor.white
 
 	public init(viewPortHandler: ViewPortHandler, yAxis: YAxis?, transformer: Transformer?, config: JSON)
@@ -97,19 +97,33 @@ open class CustomYAxisRenderer : YAxisRenderer {
 			let labelFont = yAxis.labelFont
 			let labelTextColor = yAxis.labelTextColor
 
+		let topLabelIndex = yAxis.entryCount - 1
+
 			let from = yAxis.isDrawBottomYLabelEntryEnabled ? 0 : 1
-			let to = yAxis.isDrawTopYLabelEntryEnabled ? yAxis.entryCount : (yAxis.entryCount - 1)
+		let topLabelPositon = positions[topLabelIndex].y + offset
+
+		let to = yAxis.isDrawTopYLabelEntryEnabled && topLabelPositon >= viewPortHandler.contentTop ? yAxis.entryCount : (yAxis.entryCount - 1)
 
 			for i in stride(from: from, to: to, by: 1)
 			{
 					let text = yAxis.getFormattedLabel(i)
+
+				if (labelStrokeWidth != nil) {
+					ChartUtils.drawText(
+							context: context,
+							text: text,
+							point: CGPoint(x: fixedPosition, y: positions[i].y + offset),
+							align: textAlign,
+						attributes: [.font: labelFont, .strokeColor: labelStrokeColor, .strokeWidth: labelStrokeWidth as Any]
+					)
+				}
 
 					ChartUtils.drawText(
 							context: context,
 							text: text,
 							point: CGPoint(x: fixedPosition, y: positions[i].y + offset),
 							align: textAlign,
-							attributes: [.font: labelFont, .foregroundColor: labelTextColor, .strokeColor: labelStrokeColor, .strokeWidth: labelStrokeWidth]
+							attributes: [.font: labelFont, .foregroundColor: labelTextColor]
 					)
 			}
 	}
