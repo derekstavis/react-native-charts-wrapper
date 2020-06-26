@@ -10,21 +10,12 @@ import Charts
 
 open class BFCombinedChartView: CombinedChartView {
 
-	public override init(frame: CGRect)
-	{
-        super.init(frame: frame)
-        initialize()
+	open override func initialize()
+    {
+        super.initialize()
 
-        renderer = BFCombinedChartRenderer(chart: self, animator: self.chartAnimator, viewPortHandler: self.viewPortHandler)
-	}
-
-	public required init?(coder aDecoder: NSCoder)
-	{
-        super.init(coder: aDecoder)
-        initialize()
-
-        renderer = BFCombinedChartRenderer(chart: self, animator: self.chartAnimator, viewPortHandler: self.viewPortHandler)
-	}
+        renderer = CombinedChartRenderer(chart: self, animator: self.chartAnimator, viewPortHandler: self.viewPortHandler)
+    }
 	
 	open override var data: ChartData?
 	{
