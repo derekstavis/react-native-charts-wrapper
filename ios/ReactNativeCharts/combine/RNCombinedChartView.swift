@@ -21,6 +21,7 @@ class RNCombinedChartView: RNBarLineChartViewBase {
     override init(frame: CoreGraphics.CGRect) {
 
         self._chart = BFCombinedChartView(frame: frame)
+        self._chart.renderer = BFCombinedChartRenderer(chart: self._chart, animator: self._chart.chartAnimator, viewPortHandler: self._chart.viewPortHandler)
         self._dataExtract = CombinedDataExtract()
 
         super.init(frame: frame)

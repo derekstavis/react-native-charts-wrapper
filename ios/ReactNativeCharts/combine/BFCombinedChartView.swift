@@ -9,13 +9,6 @@ import Foundation
 import Charts
 
 open class BFCombinedChartView: CombinedChartView {
-
-	open override func initialize()
-    {
-        super.initialize()
-
-        renderer = CombinedChartRenderer(chart: self, animator: self.chartAnimator, viewPortHandler: self.viewPortHandler)
-    }
 	
 	open override var data: ChartData?
 	{
