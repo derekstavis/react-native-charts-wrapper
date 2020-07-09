@@ -51,6 +51,10 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
 
     protected static final int SET_DATA_AND_LOCK_INDEX = 9;
     protected static final int UPDATE_DATA_INDEX = 10;
+    protected static final int APPEND_N = 11;
+    protected static final int UPDATE_FIRST_N = 12;
+
+    protected float mOriginalXAxisMaximum = Float.NaN;
 
     abstract DataExtract getDataExtract();
 
@@ -269,6 +273,10 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
         }
         if (BridgeUtils.validate(propMap, ReadableType.String, "position")) {
             axis.setPosition(XAxisPosition.valueOf(propMap.getString("position")));
+        }
+
+        if (BridgeUtils.validate(propMap, ReadableType.Number, "axisMaximum")) {
+            mOriginalXAxisMaximum = (float) propMap.getDouble("axisMaximum");
         }
 
     }
@@ -516,14 +524,13 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
 
                 axis.setValueFormatter(new DateFormatter(valueFormatterPattern, since, timeUnit, locale));
             } else if ("dynamicDate".equals(valueFormatter)) {
-                long[] dates = BridgeUtils.convertToLongArray(propMap.getArray("dates"));
                 Locale locale = Locale.getDefault();
 
                 if (BridgeUtils.validate(propMap, ReadableType.String, "locale")) {
                     locale = Locale.forLanguageTag(propMap.getString("locale"));
                 }
 
-                axis.setValueFormatter(new DynamicChartDateFormatter(dates, locale));
+                axis.setValueFormatter(new DynamicChartDateFormatter(locale, chart));
             } else {
                 axis.setValueFormatter(new CustomFormatter(valueFormatter));
             }

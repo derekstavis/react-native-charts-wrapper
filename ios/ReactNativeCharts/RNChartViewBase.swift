@@ -20,6 +20,8 @@ open class RNChartViewBase: UIView, ChartViewDelegate {
 
     open var onGestureEnd: RCTDirectEventBlock?
 
+    open private(set) var originalXAxisMaximum: Double?
+
     internal var hapticsEnabled = true
 
     private var group: String?
@@ -249,6 +251,11 @@ open class RNChartViewBase: UIView, ChartViewDelegate {
         if json["position"].string != nil {
             xAxis.labelPosition = BridgeUtils.parseXAxisLabelPosition(json["position"].stringValue)
         }
+
+        // store axisMaximum for restoration in updateData
+        if json["axisMaximum"].double != nil {
+            originalXAxisMaximum = json["axisMaximum"].doubleValue
+        }
     }
 
     func setCommonAxisConfig(_ axis: AxisBase, config: JSON) {
@@ -419,10 +426,8 @@ open class RNChartViewBase: UIView, ChartViewDelegate {
               let locale = config["locale"].string;
               axis.valueFormatter = CustomChartDateFormatter(pattern: valueFormatterPattern, since: since, timeUnit: timeUnit, locale: locale);
             } else if "dynamicDate" == valueFormatter.stringValue {
-                let dates = config["dates"].arrayValue.map({ $0.doubleValue });
                 let locale = config["locale"].string;
-                // get chart data and pass to DynamicChartDateFormatter
-                axis.valueFormatter = DynamicChartDateFormatter(dates: dates, locale: locale);
+				axis.valueFormatter = DynamicChartDateFormatter(locale: locale, chart: chart);
             } else {
               let customFormatter = NumberFormatter()
               customFormatter.positiveFormat = valueFormatter.stringValue

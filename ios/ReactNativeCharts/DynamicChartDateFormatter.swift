@@ -7,6 +7,7 @@
 
 import Foundation
 import Charts
+import SwiftyJSON
 
 extension Date {
     func isEqual(to date: Date, toGranularity component: Calendar.Component, in calendar: Calendar = .current) -> Bool {
@@ -23,54 +24,57 @@ extension Date {
 // assumes values are -Index
 // TODO take timeUnit
 open class DynamicChartDateFormatter: NSObject, IValueFormatter, IAxisValueFormatter {
-    
+
     open var dateFormatter = DateFormatter()
-    
-    open var dates = [Double]()
-    
-    public override init() {
-        
-    }
-    
-    public init(dates: [Double], locale: String?) {
-        self.dates = dates
+
+	private let isoFormatter = DateFormatter()
+
+	private let _chart: ChartViewBase
+
+	public init(locale: String?, chart: ChartViewBase) {
+		self._chart = chart
         self.dateFormatter.timeZone = TimeZone.current
         self.dateFormatter.locale = Locale(identifier: locale ?? Locale.current.languageCode ?? "en_US")
+		self.isoFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
     }
 
     open func stringForValue(_ value: Double, axis: AxisBase?) -> String {
-        let dateIndex = -Int(value.rounded())
-        guard dates.indices.contains(dateIndex), dateIndex == -Int(value) else { return "" }
-        
-        let date = Date(timeIntervalSince1970: dates[dateIndex] / 1000)
-        
+		let entry = _chart.data?.dataSets.first?.entryForXValue(value, closestToY: .nan)
+		if entry == nil || entry?.x != value {
+			return ""
+		}
+		guard let date = getDateFromEntry(entry) else { return "" }
+
         let entries = axis?.entries ?? []
         guard let entryIndex = entries.firstIndex(of: value) else { return "" }
 
+		var previousEntry: ChartDataEntry?
         if (entryIndex == 0) {
-            let entryInterval = abs(Int(entries[1] - entries[0]))
-            let previousDateIndex = dateIndex + entryInterval
-            return formatByPreviousDateIndex(previousDateIndex, date: date)
-        }
-        
-        let previousDateIndex = -Int(entries[entryIndex - 1].rounded())
-        return formatByPreviousDateIndex(previousDateIndex, date: date)
+            let entryInterval = abs(entries[1] - entries[0])
+			previousEntry = _chart.data?.dataSets.first?.entryForXValue(value - entryInterval, closestToY: .nan)
+		} else {
+			previousEntry = _chart.data?.dataSets.first?.entryForXValue(entries[entryIndex - 1], closestToY: .nan)
+		}
+
+		guard let previousDate = getDateFromEntry(previousEntry) else { return "" }
+
+		updateFormatting(date1: date, date2: previousDate)
+		return dateFormatter.string(from: date)
     }
-    
+
     public func stringForValue(_ value: Double, entry: ChartDataEntry, dataSetIndex: Int, viewPortHandler: ViewPortHandler?) -> String {
         // TODO impl
         return ""
     }
 
-    private func formatByPreviousDateIndex(_ previousDateIndex: Int, date: Date) -> String {
-        guard dates.indices.contains(previousDateIndex) else { return "" }
-        let previousDate = Date(timeIntervalSince1970: dates[previousDateIndex] / 1000)
+	private func getDateFromEntry(_ entry: ChartDataEntry?) -> Date? {
+		let entryData = entry?.data as! JSON
+		guard entryData["date"].string != nil else { return nil }
+		guard let date = isoFormatter.date(from: entryData["date"].stringValue) else { return nil }
 
-        updateFormatting(date1: date, date2: previousDate)
+		return date
+	}
 
-        return dateFormatter.string(from: date)
-    }
-    
     // If value diff > year
         // return year number
     // If value diff > month
@@ -90,5 +94,5 @@ open class DynamicChartDateFormatter: NSObject, IValueFormatter, IAxisValueForma
             dateFormatter.dateFormat = "HH:mm"
         }
     }
-    
+
 }

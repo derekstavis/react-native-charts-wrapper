@@ -345,7 +345,7 @@ public abstract class BarLineChartBaseManager<T extends BarLineChartBase, U exte
                 return;
 
             case UPDATE_DATA_INDEX:
-                updateData(root, args.getMap(0), args.getMap(1));
+                updateData(root, args.getMap(0));
                 return;
         }
 
@@ -400,8 +400,7 @@ public abstract class BarLineChartBaseManager<T extends BarLineChartBase, U exte
     }
 
     // similar to setDataAndLock index, but doesn't adjust the chart scale
-    private void updateData(T root, ReadableMap map, ReadableMap config) {
-        updateXAxis(root.getXAxis(), config);
+    private void updateData(T root, ReadableMap map) {
         YAxis.AxisDependency axisDependency = root.getAxisLeft().isEnabled() ? YAxis.AxisDependency.LEFT : YAxis.AxisDependency.RIGHT;
         Transformer transformer = root.getTransformer(axisDependency);
 
@@ -415,6 +414,10 @@ public abstract class BarLineChartBaseManager<T extends BarLineChartBase, U exte
         ReadableMap savedVisibleRange = extraPropertiesHolder.getExtraProperties(root).savedVisibleRange;
         if (savedVisibleRange != null) {
             updateVisibleRange(root, savedVisibleRange);
+        }
+
+        if (!Float.isNaN(mOriginalXAxisMaximum)) {
+            root.getXAxis().setAxisMaximum(mOriginalXAxisMaximum);
         }
 
         MPPointD newPixelForOriginalCenter = transformer.getPixelForValues((float) originalCenterValue.x, (float) originalCenterValue.y);
@@ -437,17 +440,6 @@ public abstract class BarLineChartBaseManager<T extends BarLineChartBase, U exte
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void updateXAxis(AxisBase xAxis, ReadableMap config) {
-        long[] dates = BridgeUtils.convertToLongArray(config.getArray("dates"));
-        Locale locale = Locale.getDefault();
-
-        if (BridgeUtils.validate(config, ReadableType.String, "locale")) {
-            locale = Locale.forLanguageTag(config.getString("locale"));
-        }
-
-        xAxis.setValueFormatter(new DynamicChartDateFormatter(dates, locale));
     }
 
     private double getVisibleYRange(T chart, YAxis.AxisDependency axisDependency) {

@@ -1,59 +1,77 @@
 package com.github.wuxudong.rncharts.charts;
 
+import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.data.DataSet;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class DynamicChartDateFormatter extends ValueFormatter {
     private SimpleDateFormat mSimpleDateFormat;
+    private SimpleDateFormat mISODateParser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
     private Calendar mCalendar = Calendar.getInstance();
+    private Chart mChart;
 
-    long[] dates;
-
-    public DynamicChartDateFormatter(long[] dates, Locale locale) {
-        this.dates = dates;
+    public DynamicChartDateFormatter(Locale locale, Chart chart) {
         this.mSimpleDateFormat = new SimpleDateFormat("HH:mm", locale);
+        this.mSimpleDateFormat.setTimeZone(TimeZone.getDefault());
+        this.mChart = chart;
+        this.mISODateParser.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
 
     @Override
     public String getAxisLabel(float value, AxisBase axis) {
-        int dateIndex = Math.abs(Math.round(value));
+        DataSet dataSet = (DataSet) mChart.getData().getDataSetByIndex(0);
+        Entry entry = dataSet.getEntryForXValue(value, Float.NaN);
 
-        if (dateIndex < 0 || dateIndex >= dates.length)
+        if (entry == null || entry.getX() != value) {
             return "";
+        }
 
-        Date date = new Date(dates[dateIndex]);
+        Date date = getDateFromEntry(entry);
+        if (date == null) {
+            return "";
+        }
 
         int entryIndex = getEntryIndexForValue(value, axis);
-
         if (entryIndex < 0) {
             return "";
         }
-
+        Entry previousEntry;
         if (entryIndex == 0) {
-            int entryInterval = (int) Math.abs(axis.mEntries[1] - axis.mEntries[0]);
-            int previousDateIndex = dateIndex + entryInterval;
-
-            return formatByPreviousDateIndex(previousDateIndex, date);
+            float entryInterval = Math.abs(axis.mEntries[1] - axis.mEntries[0]);
+            previousEntry = dataSet.getEntryForXValue(value - entryInterval, Float.NaN);
+        } else {
+            previousEntry = dataSet.getEntryForXValue(axis.mEntries[entryIndex - 1], Float.NaN);
         }
 
-        int previousDateIndex = Math.abs(Math.round(axis.mEntries[entryIndex - 1]));
-        return formatByPreviousDateIndex(previousDateIndex, date);
-    }
-
-    private String formatByPreviousDateIndex(int previousDateIndex, Date date) {
-        if (previousDateIndex < 0 || previousDateIndex >= dates.length)
+        Date previousDate = getDateFromEntry(previousEntry);
+        if (previousDate == null) {
             return "";
+        }
 
-        Date previousDate = new Date(dates[previousDateIndex]);
-
-        getFormatPattern(date, previousDate);
+        updateFormatting(date, previousDate);
 
         return mSimpleDateFormat.format(date);
+    }
+
+    private Date getDateFromEntry(Entry entry) {
+        HashMap data = (HashMap) entry.getData();
+        String dateString = (String) data.get("date");
+
+        try {
+            return mISODateParser.parse(dateString);
+        } catch (ParseException e) {
+            return null;
+        }
     }
 
     private int getEntryIndexForValue(float value, AxisBase axis) {
@@ -73,7 +91,7 @@ public class DynamicChartDateFormatter extends ValueFormatter {
     // return day number
     // else
     // return HH:mm
-    private void getFormatPattern(Date date1, Date date2) {
+    private void updateFormatting(Date date1, Date date2) {
         mCalendar.setTime(date1);
         int year1 = mCalendar.get(Calendar.YEAR);
         int month1 = mCalendar.get(Calendar.MONTH);
