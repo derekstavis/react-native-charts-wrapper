@@ -90,6 +90,10 @@ class ChartDataSetConfigUtils: NSObject {
         if config["highlightColor"].int != nil {
             dataSet.highlightColor = RCTConvert.uiColor(config["highlightColor"].intValue);
         }
+
+        if config["highlightLineDashLengths"].array != nil {
+            dataSet.highlightLineDashLengths = config["highlightLineDashLengths"].array!.map { CGFloat($0.float!) }
+        }
     }
 
 

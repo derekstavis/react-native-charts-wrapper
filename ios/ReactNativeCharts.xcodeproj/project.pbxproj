@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3FDDA86D2493003800A0CFB7 /* CustomYAxisRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDDA86C2493003800A0CFB7 /* CustomYAxisRenderer.swift */; };
+		3FDDA8752499A22100A0CFB7 /* BubbleMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDDA8742499A22100A0CFB7 /* BubbleMarker.swift */; };
 		3FF6BDFD2481DB980012D6EC /* RNBarLineChartViewBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6BDE82481DB970012D6EC /* RNBarLineChartViewBase.swift */; };
 		3FF6BDFE2481DB980012D6EC /* RNBarLineChartBaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6BDE92481DB970012D6EC /* RNBarLineChartBaseManager.swift */; };
 		3FF6BDFF2481DB980012D6EC /* ChartGroupHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6BDEA2481DB970012D6EC /* ChartGroupHolder.swift */; };
@@ -18,6 +20,7 @@
 		3FF6BE052481DB980012D6EC /* RNChartViewBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6BDF62481DB970012D6EC /* RNChartViewBase.swift */; };
 		3FF6BE062481DB980012D6EC /* RNYAxisChartViewBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6BDF92481DB970012D6EC /* RNYAxisChartViewBase.swift */; };
 		3FF6BE072481DB980012D6EC /* CustomChartDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF6BDFA2481DB970012D6EC /* CustomChartDateFormatter.swift */; };
+		3FF87042248ACAC20032FCB8 /* DynamicChartDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF87041248ACAC20032FCB8 /* DynamicChartDateFormatter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,6 +36,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3FDDA86C2493003800A0CFB7 /* CustomYAxisRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomYAxisRenderer.swift; sourceTree = "<group>"; };
+		3FDDA8742499A22100A0CFB7 /* BubbleMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleMarker.swift; sourceTree = "<group>"; };
 		3FF6BDD92481DAF30012D6EC /* libReactNativeCharts.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libReactNativeCharts.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FF6BDE32481DB960012D6EC /* ReactNativeCharts-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ReactNativeCharts-Bridging-Header.h"; sourceTree = "<group>"; };
 		3FF6BDE42481DB970012D6EC /* RNCharts-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RNCharts-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -60,6 +65,7 @@
 		3FF6BDFA2481DB970012D6EC /* CustomChartDateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomChartDateFormatter.swift; sourceTree = "<group>"; };
 		3FF6BDFB2481DB980012D6EC /* line */ = {isa = PBXFileReference; lastKnownFileType = folder; path = line; sourceTree = "<group>"; };
 		3FF6BDFC2481DB980012D6EC /* scatter */ = {isa = PBXFileReference; lastKnownFileType = folder; path = scatter; sourceTree = "<group>"; };
+		3FF87041248ACAC20032FCB8 /* DynamicChartDateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicChartDateFormatter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				3FF6BDF02481DB970012D6EC /* BalloonMarker.swift */,
+				3FDDA8742499A22100A0CFB7 /* BubbleMarker.swift */,
 				3FF6BDF22481DB970012D6EC /* bar */,
 				3FF6BDF72481DB970012D6EC /* bubble */,
 				3FF6BDED2481DB970012D6EC /* candlestick */,
@@ -101,6 +108,7 @@
 				3FF6BDEF2481DB970012D6EC /* combine */,
 				3FF6BDF52481DB970012D6EC /* ConfigurableMinimumLinePositionFillFormatter.swift */,
 				3FF6BDFA2481DB970012D6EC /* CustomChartDateFormatter.swift */,
+				3FDDA86C2493003800A0CFB7 /* CustomYAxisRenderer.swift */,
 				3FF6BDEC2481DB970012D6EC /* DataExtract.swift */,
 				3FF6BDF42481DB970012D6EC /* formatters */,
 				3FF6BDEB2481DB970012D6EC /* IndexValueFormatter.swift */,
@@ -118,6 +126,7 @@
 				3FF6BDFC2481DB980012D6EC /* scatter */,
 				3FF6BDE72481DB970012D6EC /* utils */,
 				3FF6BDE32481DB960012D6EC /* ReactNativeCharts-Bridging-Header.h */,
+				3FF87041248ACAC20032FCB8 /* DynamicChartDateFormatter.swift */,
 			);
 			path = ReactNativeCharts;
 			sourceTree = "<group>";
@@ -183,14 +192,17 @@
 				3FF6BE072481DB980012D6EC /* CustomChartDateFormatter.swift in Sources */,
 				3FF6BE012481DB980012D6EC /* DataExtract.swift in Sources */,
 				3FF6BDFF2481DB980012D6EC /* ChartGroupHolder.swift in Sources */,
+				3FDDA86D2493003800A0CFB7 /* CustomYAxisRenderer.swift in Sources */,
 				3FF6BE042481DB980012D6EC /* ConfigurableMinimumLinePositionFillFormatter.swift in Sources */,
 				3FF6BE032481DB980012D6EC /* CircleMarker.swift in Sources */,
 				3FF6BE002481DB980012D6EC /* IndexValueFormatter.swift in Sources */,
 				3FF6BE022481DB980012D6EC /* BalloonMarker.swift in Sources */,
+				3FF87042248ACAC20032FCB8 /* DynamicChartDateFormatter.swift in Sources */,
 				3FF6BDFD2481DB980012D6EC /* RNBarLineChartViewBase.swift in Sources */,
 				3FF6BE062481DB980012D6EC /* RNYAxisChartViewBase.swift in Sources */,
 				3FF6BDFE2481DB980012D6EC /* RNBarLineChartBaseManager.swift in Sources */,
 				3FF6BE052481DB980012D6EC /* RNChartViewBase.swift in Sources */,
+				3FDDA8752499A22100A0CFB7 /* BubbleMarker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

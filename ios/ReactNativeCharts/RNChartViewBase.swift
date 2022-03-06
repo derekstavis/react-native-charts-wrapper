@@ -18,6 +18,12 @@ open class RNChartViewBase: UIView, ChartViewDelegate {
 
     open var onChange:RCTBubblingEventBlock?
 
+    open var onGestureEnd: RCTDirectEventBlock?
+
+    open private(set) var originalXAxisMaximum: Double?
+
+    internal var hapticsEnabled = true
+
     private var group: String?
 
     private  var identifier: String?
@@ -249,6 +255,10 @@ open class RNChartViewBase: UIView, ChartViewDelegate {
         if json["position"].string != nil {
             xAxis.labelPosition = BridgeUtils.parseXAxisLabelPosition(json["position"].stringValue)
         }
+        // store axisMaximum for restoration in updateData
+        if json["axisMaximum"].double != nil {
+            originalXAxisMaximum = json["axisMaximum"].doubleValue
+        }
     }
 
     func setCommonAxisConfig(_ axis: AxisBase, config: JSON) {
@@ -418,6 +428,9 @@ open class RNChartViewBase: UIView, ChartViewDelegate {
               let timeUnit = config["timeUnit"].string != nil ? config["timeUnit"].stringValue : "MILLISECONDS"
               let locale = config["locale"].string;
               axis.valueFormatter = CustomChartDateFormatter(pattern: valueFormatterPattern, since: since, timeUnit: timeUnit, locale: locale);
+            } else if "dynamicDate" == valueFormatter.stringValue {
+                let locale = config["locale"].string;
+				axis.valueFormatter = DynamicChartDateFormatter(locale: locale, chart: chart);
             } else {
               let customFormatter = NumberFormatter()
               customFormatter.positiveFormat = valueFormatter.stringValue
@@ -459,6 +472,16 @@ open class RNChartViewBase: UIView, ChartViewDelegate {
             chart.marker = marker
             marker.chartView = chart
 
+        case "bubble":
+            let marker = BubbleMarker(
+                color: RCTConvert.uiColor(json["markerColor"].intValue),
+                font: markerFont,
+                textColor: RCTConvert.uiColor(json["textColor"].intValue),
+                textAlign: RCTConvert.nsTextAlignment(json["textAlign"].stringValue)
+            )
+            chart.marker = marker
+            marker.chartView = chart
+
         default:
             let marker = BalloonMarker(
                 color: RCTConvert.uiColor(json["markerColor"].intValue),
@@ -491,6 +514,18 @@ open class RNChartViewBase: UIView, ChartViewDelegate {
         } else {
             self.onSelect!(nil)
 
+        }
+    }
+
+    @objc public func chartViewDidEndPinchGesture(_ chartView: ChartViewBase) {
+    		if (self.onGestureEnd != nil) {
+    				self.onGestureEnd!(["action": "pinch"])
+    		}
+    	}
+
+    @objc public func chartViewDidEndPanning(_ chartView: ChartViewBase) {
+        if (self.onGestureEnd != nil) {
+                self.onGestureEnd!(["action": "chartTranslated"])
         }
     }
 

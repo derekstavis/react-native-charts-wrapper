@@ -84,6 +84,8 @@
 | `position`    | `number`                                                                              |         |      |
 | `maxWidth`    | `bool`                                                                                |         |      |
 | `minWidth`    | `string`                                                                              |         |      |
+| `strokeColor` | `number`                                                                              | white   |      |
+| `strokeWidth` | `number`                                                                              |   0     |      |
 | `zeroLine`    | `{`<br />`enabled: bool,`<br />`lineWidth: number,`<br />`lineColor: number`<br />`}` |         |      |
 
 ## Chart Base (All charts have these props)
@@ -264,7 +266,10 @@ type barLineScatterCandleBubble { highlightColor: number }
 type lineScatterCandleRadar {
   drawVerticalHighlightIndicator: bool,
   drawHorizontalHighlightIndicator: bool,
-  highlightLineWidth: number
+  highlightLineWidth: number,
+  // Note: only first lineLength and spaceLength will be used on android
+  highlightLineDashLengths: Array // [lineLength, spaceLength, ...]
+
 }
 ```
 
